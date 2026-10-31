@@ -48,6 +48,7 @@ interface EduVPNComponent {
     fun inject(connectionStatusFragment: ConnectionStatusFragment)
     fun inject(homeFragment: ProfileSelectionFragment)
     fun inject(settingsFragment: SettingsFragment)
+    fun inject(splitTunnelSettingsFragment: SplitTunnelSettingsFragment)
     fun inject(serverSelectionFragment: ServerSelectionFragment)
     fun inject(addServerFragment: AddServerFragment)
     fun inject(certExpiredBroadcastReceiver: CertExpiredBroadcastReceiver)

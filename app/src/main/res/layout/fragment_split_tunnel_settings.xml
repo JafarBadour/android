@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     This file is part of eduVPN.
+
+     eduVPN is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     eduVPN is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with eduVPN.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<layout>
+
+    <data />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundColor"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            tools:context=".fragment.SplitTunnelSettingsFragment">
+
+            <TextView
+                style="@style/Header"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/split_tunnel_title" />
+
+            <TextView
+                style="@style/ConnectionInfoValue"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="8dp"
+                android:text="@string/split_tunnel_description" />
+
+            <TextView
+                android:id="@+id/no_servers"
+                style="@style/ConnectionInfoValue"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="8dp"
+                android:text="@string/split_tunnel_no_servers"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/settings_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SettingsLabelTitle"
+                    android:text="@string/split_tunnel_server_label" />
+
+                <Spinner
+                    android:id="@+id/server_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp" />
+
+                <TextView
+                    android:id="@+id/default_gateway_warning"
+                    style="@style/ConnectionInfoValue"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/split_tunnel_default_gateway_warning"
+                    android:textColor="@color/warningTextColor" />
+
+                <View style="@style/SettingsSeparator" />
+
+                <TextView
+                    style="@style/SettingsLabelTitle"
+                    android:text="@string/split_tunnel_mode_label" />
+
+                <RadioGroup
+                    android:id="@+id/mode_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/mode_off"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/split_tunnel_mode_off"
+                        android:textColor="@color/textColor" />
+
+                    <RadioButton
+                        android:id="@+id/mode_include_only"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/split_tunnel_mode_include_only"
+                        android:textColor="@color/textColor" />
+
+                    <RadioButton
+                        android:id="@+id/mode_exclude"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/split_tunnel_mode_exclude"
+                        android:textColor="@color/textColor" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:id="@+id/routes_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View style="@style/SettingsSeparator" />
+
+                    <TextView
+                        style="@style/SettingsLabelTitle"
+                        android:text="@string/split_tunnel_routes_label" />
+
+                    <TextView
+                        style="@style/ConnectionInfoValue"
+                        android:layout_width="match_parent"
+                        android:text="@string/split_tunnel_ipv6_hint" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/route_input"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/split_tunnel_route_hint"
+                            android:importantForAutofill="no"
+                            android:inputType="text"
+                            android:maxLength="64"
+                            android:minHeight="48dp"
+                            android:textColor="@color/textColor"
+                            android:textColorHint="@color/settingsTextColor" />
+
+                        <Button
+                            android:id="@+id/add_route_button"
+                            style="@style/SmallButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/split_tunnel_add_route" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/route_error"
+                        style="@style/ConnectionInfoValue"
+                        android:layout_width="match_parent"
+                        android:text="@string/split_tunnel_route_invalid"
+                        android:textColor="@color/warningTextColor"
+                        android:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/route_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        tools:itemCount="2" />
+
+                    <View style="@style/SettingsSeparator" />
+
+                    <TextView
+                        style="@style/SettingsLabelTitle"
+                        android:text="@string/split_tunnel_dns_label" />
+
+                    <RadioGroup
+                        android:id="@+id/dns_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/dns_server"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:text="@string/split_tunnel_dns_server"
+                            android:textColor="@color/textColor" />
+
+                        <RadioButton
+                            android:id="@+id/dns_split"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:text="@string/split_tunnel_dns_split"
+                            android:textColor="@color/textColor" />
+
+                        <RadioButton
+                            android:id="@+id/dns_system"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
+                            android:text="@string/split_tunnel_dns_system"
+                            android:textColor="@color/textColor" />
+                    </RadioGroup>
+
+                    <TextView
+                        style="@style/ConnectionInfoValue"
+                        android:layout_width="match_parent"
+                        android:text="@string/split_tunnel_dns_hint" />
+                </LinearLayout>
+
+                <View style="@style/SettingsSeparator" />
+
+                <TextView
+                    style="@style/SettingsLabelTitle"
+                    android:text="@string/split_tunnel_apps_label" />
+
+                <RadioGroup
+                    android:id="@+id/app_mode_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/app_mode_bypass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/split_tunnel_app_mode_bypass"
+                        android:textColor="@color/textColor" />
+
+                    <RadioButton
+                        android:id="@+id/app_mode_only"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:text="@string/split_tunnel_app_mode_only"
+                        android:textColor="@color/textColor" />
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/app_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/split_tunnel_app_search_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="64"
+                    android:minHeight="48dp"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/settingsTextColor" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/app_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    tools:itemCount="3" />
+
+                <Button
+                    android:id="@+id/save_button"
+                    style="@style/BigButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/split_tunnel_save" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

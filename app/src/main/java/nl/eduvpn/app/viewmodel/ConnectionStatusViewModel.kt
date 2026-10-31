@@ -57,6 +57,7 @@ class ConnectionStatusViewModel @Inject constructor(
     @Named("connectionTimeLiveData")
     val connectionTimeLiveData: LiveData<Long>,
     private val backendService: BackendService,
+    private val splitTunnelRepository: SplitTunnelRepository,
     vpnConnectionService: VPNConnectionService,
 ) : BaseConnectionViewModel(
     context,
@@ -85,6 +86,9 @@ class ConnectionStatusViewModel @Inject constructor(
     val canRenew = MutableLiveData(false)
     val vpnStatus = MutableLiveData(VPNService.VPNStatus.DISCONNECTED)
 
+    /** Whether the split tunneling settings of this server change the server configuration. */
+    val splitTunnelActive = MutableLiveData(false)
+
     private val _connectionParentAction = MutableLiveData<ParentAction>()
     val connectionParentAction = _connectionParentAction.toSingleEvent()
 
@@ -97,6 +101,7 @@ class ConnectionStatusViewModel @Inject constructor(
 
 
     init {
+        refreshSplitTunnelActive()
         val currentServer = historyService.currentServer
         certExpiryTimes = historyService.certExpiryTimes
         val connectionInstance = currentServer?.asInstance()
@@ -172,6 +177,12 @@ class ConnectionStatusViewModel @Inject constructor(
     override fun onResume() {
         super.onResume()
         cancelAllExpiryNotifications()
+        refreshSplitTunnelActive()
+    }
+
+    private fun refreshSplitTunnelActive() {
+        val baseUri = preferencesService.getCurrentInstance()?.baseURI
+        splitTunnelActive.value = baseUri != null && splitTunnelRepository.get(baseUri).isActive
     }
 
     fun onPause() {

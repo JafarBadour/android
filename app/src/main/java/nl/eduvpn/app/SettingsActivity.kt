@@ -24,6 +24,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import nl.eduvpn.app.base.BaseActivity
 import nl.eduvpn.app.databinding.ActivitySettingsBinding
 import nl.eduvpn.app.fragment.SettingsFragment
@@ -57,7 +58,20 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>() {
         }
     }
 
+    /**
+     * Shows another settings screen on top of the current one.
+     */
+    fun openFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .addToBackStack(null)
+            .add(R.id.content_frame, fragment)
+            .commit()
+    }
+
     companion object {
         const val RESULT_APP_DATA_CLEARED = 101
+
+        /** The user changed split tunneling settings and asked to reconnect. */
+        const val RESULT_SPLIT_TUNNEL_RECONNECT = 102
     }
 }

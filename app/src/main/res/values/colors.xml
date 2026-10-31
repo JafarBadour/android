@@ -31,5 +31,6 @@
     <color name="switchBackgroundUnchecked">#b2b2b2</color>
     <color name="switchBackgroundDisabled">#E4E4E4</color>
     <color name="switchForeground">#FFFFFF</color>
+    <color name="warningTextColor">#B3261E</color>
 
 </resources>

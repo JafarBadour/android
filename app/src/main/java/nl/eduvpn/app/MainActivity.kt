@@ -318,6 +318,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     vpnService.get().disconnect()
                 }
                 openFragment(OrganizationSelectionFragment(), false)
+            } else if (resultCode == SettingsActivity.RESULT_SPLIT_TUNNEL_RECONNECT) {
+                // Reconnecting re-fetches the configuration, which runs the split tunneling
+                // rewrite again with the settings the user just saved.
+                viewModel.reconnectToCurrentServer(vpnService.orElse(null))
             }
         } else if (requestCode == 0) {
             // Probably VPN permission granted. Can't really check for it

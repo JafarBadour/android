@@ -67,4 +67,11 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(ApiLogsViewModel::class)
     fun bindApiLogsViewModel(apiLogsViewModel: ApiLogsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SplitTunnelSettingsViewModel::class)
+    fun bindSplitTunnelSettingsViewModel(
+        splitTunnelSettingsViewModel: SplitTunnelSettingsViewModel
+    ): ViewModel
 }

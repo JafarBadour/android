@@ -203,4 +203,41 @@
     <string name="cert_expiry_notification_text">The VPN certificate is about to expire</string>
     <string name="vpn_connection_channel_name">VPN connection status</string>
     <string name="error_starting_up_proxyguard_failed">Starting up of ProxyGuard failed</string>
+
+    <!-- Split tunneling -->
+    <string name="split_tunnel_title">Split tunneling</string>
+    <string name="split_tunnel_configure_button">Configure</string>
+    <string name="split_tunnel_description">Choose which traffic goes through the VPN. These settings are stored on this device only and are applied every time you connect.</string>
+    <string name="split_tunnel_no_servers">Add a server first to configure split tunneling.</string>
+    <string name="split_tunnel_server_label">Server</string>
+    <string name="split_tunnel_default_gateway_warning">Your institution configured this profile to route all traffic; overriding it may violate its policy.</string>
+    <string name="split_tunnel_mode_label">Mode</string>
+    <string name="split_tunnel_mode_off">Off — use the configuration from the server</string>
+    <string name="split_tunnel_mode_include_only">Only send the networks below through the VPN</string>
+    <string name="split_tunnel_mode_exclude">Send everything except the networks below through the VPN</string>
+    <string name="split_tunnel_routes_label">Networks</string>
+    <string name="split_tunnel_route_hint">10.0.0.0/8 or 2001:db8::/32</string>
+    <string name="split_tunnel_add_route">Add</string>
+    <string name="split_tunnel_remove_route">Remove</string>
+    <string name="split_tunnel_remove_route_description">Remove %1$s</string>
+    <string name="split_tunnel_route_invalid">Enter a valid IPv4 or IPv6 network in CIDR notation. A network covering every address is not allowed.</string>
+    <string name="split_tunnel_ipv6_hint">IPv4 and IPv6 are handled separately. If you only list IPv4 networks, all IPv6 traffic keeps using the VPN.</string>
+    <string name="split_tunnel_dns_label">DNS</string>
+    <string name="split_tunnel_dns_server">Use the DNS servers of the VPN for everything</string>
+    <string name="split_tunnel_dns_split">Use the DNS servers of the VPN for its own domains only</string>
+    <string name="split_tunnel_dns_system">Keep using the DNS servers of this device</string>
+    <string name="split_tunnel_dns_hint">Android only sends queries for the search domains of the VPN to its DNS servers when the VPN does not carry all traffic, so on a split tunnel the first two options behave the same.</string>
+    <string name="split_tunnel_apps_label">Apps</string>
+    <string name="split_tunnel_app_mode_bypass">The apps below skip the VPN</string>
+    <string name="split_tunnel_app_mode_only">Only the apps below use the VPN</string>
+    <string name="split_tunnel_app_search_hint">Search apps</string>
+    <string name="split_tunnel_save">Save</string>
+    <string name="split_tunnel_saved">Split tunneling settings saved.</string>
+    <string name="split_tunnel_reconnect_needed">Reconnect to apply the new settings.</string>
+    <string name="split_tunnel_reconnect_action">Reconnect</string>
+    <string name="split_tunnel_policy_warning_title">Overriding the server policy</string>
+    <string name="split_tunnel_policy_warning_message">%1$s configured this profile to route all traffic through the VPN. Changing that may violate the policy of your institution, and traffic you exclude is no longer protected by the VPN. Continue?</string>
+    <string name="split_tunnel_policy_warning_accept">Continue</string>
+    <string name="split_tunnel_policy_warning_decline">Cancel</string>
+    <string name="split_tunnel_active">Split tunneling active</string>
 </resources>

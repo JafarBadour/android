@@ -57,6 +57,9 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
             )
         }
         binding.resetDataButton.setOnClickListener { onResetDataClicked() }
+        binding.splitTunnelButton.setOnClickListener {
+            (activity as? SettingsActivity)?.openFragment(SplitTunnelSettingsFragment())
+        }
         binding.viewOpenvpnLogsButton.setOnClickListener {
             val intent = Intent(activity, OpenVpnLogsActivity::class.java)
             startActivity(intent)

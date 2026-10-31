@@ -11,6 +11,19 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
+    <!--
+        Needed to populate the app picker of the per-app split tunneling setting. Declaring the
+        launcher intent rather than asking for QUERY_ALL_PACKAGES keeps the visibility limited to
+        apps the user can start themselves, which is exactly what the picker offers, and needs no
+        Play Store declaration.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
     <application
         android:name=".EduVPNApplication"
         android:allowBackup="false"

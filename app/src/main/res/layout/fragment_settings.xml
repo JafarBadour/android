@@ -119,10 +119,37 @@
                     android:layout_below="@id/view_api_logs_container" />
 
                 <FrameLayout
-                    android:id="@+id/licenses_container"
+                    android:id="@+id/split_tunnel_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/view_api_logs_separator"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:id="@+id/split_tunnel_title"
+                        style="@style/SettingsLabelTitle"
+                        android:text="@string/split_tunnel_title" />
+
+                    <Button
+                        android:id="@+id/split_tunnel_button"
+                        style="@style/SmallButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:text="@string/split_tunnel_configure_button" />
+
+                </FrameLayout>
+
+                <View
+                    android:id="@+id/split_tunnel_separator"
+                    style="@style/SettingsSeparator"
+                    android:layout_below="@id/split_tunnel_container" />
+
+                <FrameLayout
+                    android:id="@+id/licenses_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/split_tunnel_separator"
                     android:background="?attr/selectableItemBackground">
 
                     <TextView
