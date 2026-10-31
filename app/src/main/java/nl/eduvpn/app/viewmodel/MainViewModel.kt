@@ -18,6 +18,7 @@ import nl.eduvpn.app.entity.AuthorizationType
 import nl.eduvpn.app.entity.Instance
 import nl.eduvpn.app.entity.Profile
 import nl.eduvpn.app.entity.SerializedVpnConfig
+import nl.eduvpn.app.entity.SplitTunnelSettings
 import nl.eduvpn.app.entity.VPNConfig
 import nl.eduvpn.app.entity.exception.CommonException
 import nl.eduvpn.app.service.BackendService
@@ -25,7 +26,10 @@ import nl.eduvpn.app.service.EduVPNOpenVPNService
 import nl.eduvpn.app.service.HistoryService
 import nl.eduvpn.app.service.OrganizationService
 import nl.eduvpn.app.service.PreferencesService
+import nl.eduvpn.app.service.SplitTunnelRepository
+import nl.eduvpn.app.service.SplitTunnelRewriter
 import nl.eduvpn.app.service.VPNConnectionService
+import nl.eduvpn.app.service.VPNService
 import nl.eduvpn.app.utils.Log
 import nl.eduvpn.app.utils.countryCodeToCountryNameAndFlag
 import nl.eduvpn.app.utils.countryName
@@ -42,7 +46,8 @@ class MainViewModel @Inject constructor(
     private val backendService: BackendService,
     private val preferencesService: PreferencesService,
     private val eduVpnOpenVpnService: EduVPNOpenVPNService,
-    private val vpnConnectionService: VPNConnectionService
+    private val vpnConnectionService: VPNConnectionService,
+    private val splitTunnelRepository: SplitTunnelRepository
 ) : BaseConnectionViewModel(
     context,
     backendService,
@@ -148,16 +153,33 @@ class MainViewModel @Inject constructor(
             }
         }
 
+        // The split tunneling settings are re-applied to every configuration the server hands
+        // out, including the ones fetched again after an expiry or authorization refresh, and to
+        // the OpenVPN configuration we fall back to. They are never stored in the config cache.
+        val splitTunnelSettings = splitTunnelSettingsForCurrentServer()
+        preferencesService.getCurrentInstance()?.let {
+            preferencesService.setLastDefaultGateway(it.baseURI, config.defaultGateway)
+        }
+
         val parsedConfig = if (protocol == Protocol.OpenVPN.nativeValue || protocol == Protocol.OpenVPNWithTCP.nativeValue) {
             eduVpnOpenVpnService.importConfig(
                 config.config,
                 null,
+                splitTunnelSettings,
+                config.defaultGateway,
             )?.let {
                 VPNConfig.OpenVPN(it)
             } ?: throw IllegalArgumentException("Unable to parse profile")
         } else if (protocol == Protocol.WireGuard.nativeValue || protocol == Protocol.WireGuardWithTCP.nativeValue) {
             try {
-                VPNConfig.WireGuard(Config.parse(BufferedReader(StringReader(config.config))))
+                val wireGuardConfig = Config.parse(BufferedReader(StringReader(config.config)))
+                VPNConfig.WireGuard(
+                    SplitTunnelRewriter.rewrite(
+                        wireGuardConfig,
+                        splitTunnelSettings,
+                        config.defaultGateway,
+                    )
+                )
             } catch (ex: BadConfigException) {
                 // Notify the user that the config is not valid
                 Log.e(TAG, "Unable to parse WireGuard config", ex)
@@ -182,6 +204,18 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    /**
+     * The split tunneling settings of the server we are connecting to.
+     *
+     * An unknown server, or a server the user never configured, yields
+     * [SplitTunnelSettings.OFF] and the server configuration is used unchanged.
+     */
+    private fun splitTunnelSettingsForCurrentServer(): SplitTunnelSettings {
+        val baseUri = preferencesService.getCurrentInstance()?.baseURI
+            ?: return SplitTunnelSettings.OFF
+        return splitTunnelRepository.get(baseUri)
     }
 
     suspend fun handleRedirection(data: Uri?) : Boolean {
@@ -227,6 +261,24 @@ class MainViewModel @Inject constructor(
                 _mainParentAction.postValue(MainParentAction.ShowError(ex))
             }
         }
+    }
+
+    /**
+     * Disconnects and connects to the current server again.
+     *
+     * Used after the split tunneling settings of the connected server changed: the configuration
+     * is fetched again, so the rewrite runs with the new settings.
+     */
+    fun reconnectToCurrentServer(vpnService: VPNService?) {
+        if (vpnService != null && vpnService.getStatus() != VPNService.VPNStatus.DISCONNECTED) {
+            disconnectWithCall(vpnService)
+        }
+        val instance = preferencesService.getCurrentInstance()
+        if (instance == null) {
+            Log.w(TAG, "No current server to reconnect to.")
+            return
+        }
+        getProfiles(instance, preferTcp = false)
     }
 
     fun connectWithPendingConfig(activity: Activity) {

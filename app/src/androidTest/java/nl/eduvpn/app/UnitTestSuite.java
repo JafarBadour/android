@@ -20,6 +20,7 @@ package nl.eduvpn.app;
 import nl.eduvpn.app.service.HistoryServiceTest;
 import nl.eduvpn.app.service.PreferencesServiceTest;
 import nl.eduvpn.app.service.SerializerServiceTest;
+import nl.eduvpn.app.service.SplitTunnelRepositoryTest;
 import nl.eduvpn.app.utils.FormattingUtilsTest;
 
 import org.junit.runner.RunWith;
@@ -31,7 +32,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({SerializerServiceTest.class, PreferencesServiceTest.class,
-        HistoryServiceTest.class, FormattingUtilsTest.class})
+        HistoryServiceTest.class, FormattingUtilsTest.class, SplitTunnelRepositoryTest.class})
 public class UnitTestSuite {
     // Test suite used to run all unit tests at once.
     // To run the tests, right click on the class name, and select "Run 'UnitTestSuite'".

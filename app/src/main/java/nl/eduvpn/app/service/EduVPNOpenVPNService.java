@@ -52,6 +52,7 @@ import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VpnStatus;
 import kotlinx.coroutines.flow.Flow;
 import nl.eduvpn.app.R;
+import nl.eduvpn.app.entity.SplitTunnelSettings;
 import nl.eduvpn.app.livedata.ByteCount;
 import nl.eduvpn.app.livedata.IPs;
 import nl.eduvpn.app.livedata.UnlessDisconnectedLiveData;
@@ -154,15 +155,22 @@ public class EduVPNOpenVPNService extends VPNService implements VpnStatus.StateL
     /**
      * Imports a config which is represented by a string.
      *
-     * @param configString  The config as a string.
-     * @param preferredName The preferred name for the config.
+     * @param configString         The config as a string.
+     * @param preferredName        The preferred name for the config.
+     * @param splitTunnelSettings  The user's split tunneling settings for this server.
+     * @param isDefaultGateway     The server's default_gateway flag.
      */
     @Nullable
-    public VpnProfile importConfig(String configString, String preferredName) {
+    public VpnProfile importConfig(String configString, String preferredName,
+                                   @NonNull SplitTunnelSettings splitTunnelSettings,
+                                   boolean isDefaultGateway) {
         ConfigParser configParser = new ConfigParser();
         try {
             configParser.parseConfig(new StringReader(configString));
             VpnProfile profile = configParser.convertProfile();
+            // Apply the split tunneling settings before the profile is persisted, so that a
+            // profile reloaded after a process restart carries them too.
+            SplitTunnelRewriter.INSTANCE.applyTo(profile, splitTunnelSettings, isDefaultGateway);
             _configsCreatedInThisSession.add(profile.getUUIDString());
             profile.mAlias = _context.getString(R.string.app_name);
             if (preferredName != null) {
