@@ -257,10 +257,15 @@
                     android:textColor="@color/textColor"
                     android:textColorHint="@color/settingsTextColor" />
 
+                <!--
+                     Bounded rather than wrap_content: inside a ScrollView a wrap_content
+                     RecyclerView inflates every row, and a device can easily have hundreds of
+                     apps. A fixed height lets it recycle and scroll on its own.
+                -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/app_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="320dp"
                     android:layout_marginTop="4dp"
                     tools:itemCount="3" />
 
