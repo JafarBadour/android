@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- client-side split tunneling, off by default, configurable per server
+  (route include/exclude lists for WireGuard and OpenVPN, per-app lists, DNS behaviour) -
+  see [docs/SPLIT_TUNNELING.md](docs/SPLIT_TUNNELING.md)
+
 ## 3.3.4 (...)
 - update WireGuard, OpenVPN and "common" sub-modules
 - Move backend methods to background threads
