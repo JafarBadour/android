@@ -97,6 +97,14 @@ class ApplicationModule(private val application: EduVPNApplication) {
 
     @Provides
     @Singleton
+    fun provideSplitTunnelRepository(
+        preferencesService: PreferencesService,
+    ): SplitTunnelRepository {
+        return SplitTunnelRepository(preferencesService)
+    }
+
+    @Provides
+    @Singleton
     @Named("timer")
     fun provide1SecondTimer(): LiveData<Unit> {
         return liveData {

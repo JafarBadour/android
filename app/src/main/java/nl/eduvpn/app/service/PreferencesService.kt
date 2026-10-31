@@ -56,6 +56,8 @@ class PreferencesService(
 
         private const val KEY_APP_SETTINGS = "app_settings"
         private const val KEY_PREFIX_SERVER_TOKEN = "server_token_"
+        private const val KEY_PREFIX_SPLIT_TUNNEL = "split_tunnel_"
+        private const val KEY_PREFIX_DEFAULT_GATEWAY = "default_gateway_"
 
         const val KEY_INSTANCE = "instance"
         const val KEY_VPN_PROTOCOL = "vpn_protocol"
@@ -208,6 +210,73 @@ class PreferencesService(
 
     fun getCurrentProtocol(): Int {
         return getSharedPreferences().getInt(KEY_VPN_PROTOCOL, Protocol.Unknown.nativeValue)
+    }
+
+    /**
+     * Returns the split tunneling settings for a server.
+     *
+     * @param serverId The base URL of the server.
+     * @return The stored settings. A missing or unreadable entry yields
+     *   [SplitTunnelSettings.OFF], so the server configuration is used unchanged.
+     */
+    fun getSplitTunnelSettings(serverId: String): SplitTunnelSettings {
+        val serialized =
+            getSharedPreferences().getString(KEY_PREFIX_SPLIT_TUNNEL + serverId, null)
+                ?: return SplitTunnelSettings.OFF
+        return try {
+            _serializerService.deserializeSplitTunnelSettings(serialized)
+        } catch (ex: SerializerService.UnknownFormatException) {
+            Log.e(TAG, "Unable to deserialize split tunneling settings, ignoring them!", ex)
+            SplitTunnelSettings.OFF
+        }
+    }
+
+    /**
+     * Saves the split tunneling settings of a server.
+     *
+     * @param serverId The base URL of the server.
+     * @param settings The settings to save, or `null` to forget them.
+     */
+    fun setSplitTunnelSettings(serverId: String, settings: SplitTunnelSettings?) {
+        val key = KEY_PREFIX_SPLIT_TUNNEL + serverId
+        if (settings == null) {
+            getSharedPreferences().edit().remove(key).apply()
+            return
+        }
+        try {
+            getSharedPreferences().edit()
+                .putString(key, _serializerService.serializeSplitTunnelSettings(settings))
+                .apply()
+        } catch (ex: SerializerService.UnknownFormatException) {
+            Log.e(TAG, "Unable to serialize split tunneling settings!", ex)
+        }
+    }
+
+    /** Forgets the split tunneling settings of a server. */
+    fun removeSplitTunnelSettings(serverId: String) = setSplitTunnelSettings(serverId, null)
+
+    /**
+     * Returns the `default_gateway` flag of the last configuration this server handed out.
+     *
+     * @param serverId The base URL of the server.
+     * @return The remembered flag, or `null` when no configuration was seen yet.
+     */
+    fun getLastDefaultGateway(serverId: String): Boolean? {
+        val key = KEY_PREFIX_DEFAULT_GATEWAY + serverId
+        if (!getSharedPreferences().contains(key)) {
+            return null
+        }
+        return getSharedPreferences().getBoolean(key, true)
+    }
+
+    /**
+     * Remembers the `default_gateway` flag of a configuration, so that the split tunneling
+     * settings screen can warn about overriding a full-tunnel policy before connecting again.
+     */
+    fun setLastDefaultGateway(serverId: String, isDefaultGateway: Boolean) {
+        getSharedPreferences().edit()
+            .putBoolean(KEY_PREFIX_DEFAULT_GATEWAY + serverId, isDefaultGateway)
+            .apply()
     }
 
     fun getToken(serverId: String): String? {

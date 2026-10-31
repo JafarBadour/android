@@ -28,6 +28,7 @@ import nl.eduvpn.app.entity.Instance
 import nl.eduvpn.app.entity.OrganizationList
 import nl.eduvpn.app.entity.SerializedVpnConfig
 import nl.eduvpn.app.entity.ServerList
+import nl.eduvpn.app.entity.SplitTunnelSettings
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -151,6 +152,38 @@ class SerializerService {
     fun deserializeCurrentServer(json: String): CurrentServer {
         return try {
             jsonSerializer.decodeFromString(CurrentServer.serializer(), json)
+        } catch (ex: SerializationException) {
+            throw UnknownFormatException(ex)
+        }
+    }
+
+    /**
+     * Serializes the split tunneling settings of a single server.
+     *
+     * @param settings The settings to serialize.
+     * @return The JSON representation.
+     * @throws UnknownFormatException Thrown if there was an error.
+     */
+    @Throws(UnknownFormatException::class)
+    fun serializeSplitTunnelSettings(settings: SplitTunnelSettings): String {
+        return try {
+            jsonSerializer.encodeToString(SplitTunnelSettings.serializer(), settings)
+        } catch (ex: SerializationException) {
+            throw UnknownFormatException(ex)
+        }
+    }
+
+    /**
+     * Deserializes the split tunneling settings of a single server.
+     *
+     * @param json The JSON to parse.
+     * @return The settings as a POJO.
+     * @throws UnknownFormatException Thrown when the format was not as expected.
+     */
+    @Throws(UnknownFormatException::class)
+    fun deserializeSplitTunnelSettings(json: String): SplitTunnelSettings {
+        return try {
+            jsonSerializer.decodeFromString(SplitTunnelSettings.serializer(), json)
         } catch (ex: SerializationException) {
             throw UnknownFormatException(ex)
         }
