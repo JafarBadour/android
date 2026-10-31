@@ -61,16 +61,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     @Inject
-    protected lateinit var vpnService: Optional<VPNService>
+    lateinit var vpnService: Optional<VPNService>
 
     @Inject
-    protected lateinit var eduVPNOpenVPNService: EduVPNOpenVPNService
+    lateinit var eduVPNOpenVPNService: EduVPNOpenVPNService
 
     @Inject
-    protected lateinit var wireGuardService: WireGuardService
+    lateinit var wireGuardService: WireGuardService
 
     @Inject
-    protected lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModelFactory: ViewModelFactory
 
     protected val viewModel by viewModels<MainViewModel> { viewModelFactory }
 

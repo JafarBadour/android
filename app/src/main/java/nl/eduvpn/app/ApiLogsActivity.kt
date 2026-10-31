@@ -15,7 +15,7 @@ class ApiLogsActivity : BaseActivity<ActivityApiLogsBinding>() {
     override val layout = R.layout.activity_api_logs
 
     @Inject
-    protected lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModelFactory: ViewModelFactory
 
     private val viewModel by viewModels<ApiLogsViewModel> { viewModelFactory }
     override fun onCreate(savedInstanceState: Bundle?) {

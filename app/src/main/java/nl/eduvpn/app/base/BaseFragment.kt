@@ -34,7 +34,7 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment() {
     protected lateinit var binding: B
 
     @Inject
-    protected lateinit var viewModelFactory : ViewModelFactory
+    lateinit var viewModelFactory : ViewModelFactory
 
     @get:LayoutRes
     protected abstract val layout: Int

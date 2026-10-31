@@ -10,10 +10,10 @@ import javax.inject.Inject
 class DisconnectVPNBroadcastReceiver : BroadcastReceiver() {
 
     @Inject
-    protected lateinit var vpnConnectionService: VPNConnectionService
+    lateinit var vpnConnectionService: VPNConnectionService
 
     @Inject
-    protected lateinit var vpnService: VPNService
+    lateinit var vpnService: VPNService
 
     companion object {
         val ACTION = this::class.qualifiedName!!.plus(".disconnect_vpn")

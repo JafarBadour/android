@@ -17,7 +17,7 @@ class OpenVpnLogsActivity : BaseActivity<ActivityOpenvpnLogsBinding>() {
     override val layout = R.layout.activity_openvpn_logs
 
     @Inject
-    protected lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
